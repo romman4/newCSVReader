@@ -10,45 +10,39 @@ public class Solution {
     private static String FILE_NAME1 = "doc/test1kEntries.csv";
     private static String FILE_NAME2 = "doc/test10kEntries.csv";
     private static List<Group> listOfGroups;
-    private static long start = 0, finish = 0;
 
     public static void main(String[] args) throws Exception{
         String lineIn;
         Stroka tempStroka = null;
         listOfGroups = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_NAME2)));
-        long summaryTime = 0;
 
-        start = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
         while (reader.ready()) {
             lineIn = reader.readLine();
             try {
                 tempStroka = new Stroka(lineIn, longFromStringWithoutQuotes((lineIn.split(";")[0])),
-                        longFromStringWithoutQuotes((lineIn.split(";")[1])),                    // создаем строку s, которая явл строкой файла csv
+                        longFromStringWithoutQuotes((lineIn.split(";")[1])),                    // создаем строку tempStroka, которая явл строкой файла csv
                         longFromStringWithoutQuotes((lineIn.split(";")[2])));
                 tempStroka.stringValueCsv = lineIn;
             } catch (RuntimeException e) {
                 System.out.println("Invalid string!");
                 System.out.println(lineIn);
             }
-            strAddToHerGroup(tempStroka, listOfGroups);                                          // добавляем в список строку из файла цсв
+            strAddToHerGroup(tempStroka);                                          // добавляем в список строку из файла цсв
         }
-        finish = System.currentTimeMillis();
-
-        System.out.println("Суммарное время: " + (finish - start));
-
 
         Collections.sort(listOfGroups);
-//        for (Group g :
-//                listOfGroups) {
-//            System.out.println("Группа:");
-//            System.out.println(g);
-//        }
-
-//        System.out.println("Время обработки: " + (finish - start)/100 + " миллисекунд.");
+        for (Group g :
+                listOfGroups) {
+            System.out.println("Группа:");
+            System.out.println(g);
+        }
+        long finish = System.currentTimeMillis();
+        System.out.println("Суммарное время: " + (finish - start));
     }
 
-    private static void strAddToHerGroup(Stroka stroka, List<Group> list) {
+    private static void strAddToHerGroup(Stroka stroka) {
         if (!isGroupsContainsOurStrokaGroup(stroka)) {
             listOfGroups.add(new Group(stroka));
         }
